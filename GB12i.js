@@ -46,5 +46,11 @@ window.addEventListener("message", (e) => {
     if (e.data?.type === "close-ad") {
         backdrop.classList.remove("is-visible");
         backdrop.hidden = true;
+
+        // Force the iframe to reload by resetting the src
+        const adFrame = $("ad-wrapper");
+        const currentSrc = adFrame.src;
+        adFrame.src = ""; // Clear it first
+        adFrame.src = currentSrc; // Re-assign the original URL to trigger reload
     }
 });
