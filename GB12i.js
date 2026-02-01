@@ -9,7 +9,7 @@ function closePopup1(){ $("popupOverlay1").classList.remove("is-visible"); $("po
 function openPopup2(html){ $("popupContent2").innerHTML=html; $("popupOverlay2").classList.remove("hidden"); $("popupOverlay2").classList.add("is-visible"); }
 function closePopup2(){ $("popupOverlay2").classList.remove("is-visible"); $("popupOverlay2").classList.add("hidden"); }
 
-const backdrop = document.getElementById("ad-backdrop");
+const backdrop = $("ad-backdrop");
 
 function openAd() {
     backdrop.classList.add("is-visible");
@@ -44,7 +44,7 @@ function forgotPassword(){
 
 window.addEventListener("message", (e) => {
     if (e.data?.type === "close-ad") {
-        setTimeout(() => ad.remove(), 300);
+        setTimeout(() => backdrop.remove(), 300);
         backdrop.classList.remove("is-visible");
         backdrop.hidden = true;
     }
