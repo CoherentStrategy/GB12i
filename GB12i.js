@@ -18,8 +18,8 @@ function openAd() {
 
 
 /* ---------- ----------*/
-const register = document.getElementsByClassName("register");
-const login = document.getElementsByClassName("login");
+const register = document.getElementsByClassName("register")[0];
+const login = document.getElementsByClassName("login")[0];
 
 $('registerBtn').addEventListener('click', () => {
     $('container').classList.remove("active");
@@ -44,7 +44,6 @@ function forgotPassword(){
 
 window.addEventListener("message", (e) => {
     if (e.data?.type === "close-ad") {
-        setTimeout(() => backdrop.remove(), 300);
         backdrop.classList.remove("is-visible");
         backdrop.hidden = true;
     }
