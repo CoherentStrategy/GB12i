@@ -61,7 +61,7 @@ const channel = new BroadcastChannel('game_session_channel');
 
         // Unique ID for this specific tab to keep track of who owns what
         const tabId = Math.random().toString(36).substring(2, 9);
-        $('container').innerText = `Tab ID: ${tabId}`; // Change id if nessesary
+        $('session-id-display').innerText = `Tab ID: ${tabId}`; // Change id if nessesary
 
         // 1. When loading a new tab, check if another tab is already active
         channel.postMessage({ type: 'PING_EXISTING_TABS', senderId: tabId });
