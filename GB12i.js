@@ -56,3 +56,16 @@ window.addEventListener("message", (e) => {
 });
 
 /* ----------- ----------- */
+const channel = new BroadcastChannel('app_tab_auth');
+channel.postMessage({ type : 'NEW_TAB_OPENED'});
+
+channel.onmessage = (event) => {
+    if (channel.data.type === 'NEW_TAB_OPENED') {
+        channel.postMessage({ type : 'ALREADY_OPEN'});
+    }
+
+    if (channel.data.type === 'ALREADY_OPEN') {
+        alert('This website is already opened in another tab');
+        
+    }
+}
