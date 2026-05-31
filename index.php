@@ -17,6 +17,7 @@
             <input type="text" name="uid" placeholder="Username">
             <input type="password" name="pwd" placeholder="Password">
             <input type="password" name="pwdrepeat" placeholder="Repeat Password">
+            <input type="text" name="email" placeholder="Email">
             <button type="submit" name="submit">Register</button>
             <p id="session-id-display">Your device doesn't support JavaScript</p>
         </form>
