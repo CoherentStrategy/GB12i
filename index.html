@@ -27,7 +27,6 @@
             <input type="password" placeholder="Password">
             <a href="#" id="forgotPassword">Forgot Password?</a>
             <button>Confirm Login</button>
-            <p id="session-id-display">Your device doesn't support JavaScript</p>
         </form>
     </div>
     <div class="toggle-container">
@@ -85,13 +84,14 @@
 </div>
 
     <!--TAB-->
-    <div id="duplicate-overlay">
-        <div class="warning-box">
-            <h1>DUPLICATE TAB DETECTED</h1>
-            <p>Another tab is already running this game session. Would you like to resume playing on this tab instead?</p>
-            <button class="takeover-btn" id="takeover-button" onclick="claimSession()">Use This Tab Instead</button>
-        </div>
+<div id="duplicate-overlay">
+    <div class="warning-box">
+        <h1>DUPLICATE TAB DETECTED</h1>
+        <p>Another tab is already running this game session. Would you like to resume playing on this tab instead?</p>
+        <button class="takeover-btn" id="takeover-button" onclick="claimSession()">Use This Tab Instead</button>
     </div>
+</div>
+
 <script src="GB12i.js"></script>
 <body>
 </html>
