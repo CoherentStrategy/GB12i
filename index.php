@@ -12,16 +12,17 @@
 <!--LOGIN AND REGISTER-->
 <div class="container" id="container">
     <div class="form-container register">
-        <form>
+        <form action="includes/register.inc.php" method="post">
             <h2>Create Account</h2>
-            <input type="text" placeholder="Username">
-            <input type="password" placeholder="Password">
-            <button>Register</button>
+            <input type="text" name="uid" placeholder="Username">
+            <input type="password" name="pwd" placeholder="Password">
+            <input type="password" name="pwdrepeat" placeholder="Repeat Password">
+            <button type="submit" name="submit">Register</button>
             <p id="session-id-display">Your device doesn't support JavaScript</p>
         </form>
     </div>
     <div class="form-container login">
-        <form>
+        <form action="includes/login.inc.php" method="post">
             <h2>Login</h2>
             <input type="text" placeholder="Username">
             <input type="password" placeholder="Password">
