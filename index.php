@@ -57,7 +57,7 @@
             <input type="text" placeholder="Username">
             <input type="password" placeholder="Password">
             <a href="#" id="forgotPassword">Forgot Password?</a>
-            <button>Confirm Login</button>
+            <button type="submit" name="submit">Confirm Login</button>
         </form>
     </div>
     <div class="toggle-container">
