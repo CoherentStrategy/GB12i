@@ -43,7 +43,7 @@ session_start();
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your email is not verified yet. Please check your inbox and verify your account.'); });</script>";
         }
         else if ($_GET["error"] == "expiredanddeleted") {
-            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your account was not verified within 5 minutes and has been deleted. Please register again.'); });</script>";
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your account was not verified within 15 minutes and has been deleted. Please register again.'); });</script>";
         }
         else if ($_GET["error"] == "verified") {
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your email has been verified. You can now log in.'); });</script>";

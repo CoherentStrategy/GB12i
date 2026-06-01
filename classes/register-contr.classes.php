@@ -37,7 +37,7 @@ class RegisterContr extends Register {
         }
 
         $token = bin2hex(random_bytes(16));
-        $expires = date("Y-m-d H:i:s", strtotime("+5 minutes"));
+        $expires = date("Y-m-d H:i:s", strtotime("+15 minutes"));
 
         $this->setUser($this->uid, $this->pwd, $this->email, $token, $expires);
         $this->sendVerificationEmail($this->email, $token);
@@ -46,7 +46,7 @@ class RegisterContr extends Register {
     private function sendVerificationEmail($email, $token) {
         $subject = "Verify your Gamebook 12i account";
         $verifyUrl = "http://" . $_SERVER["HTTP_HOST"] . "/verify.php?email=" . urlencode($email) . "&token=" . $token;
-        $message = "Please verify your account by clicking the link below:\n\n" . $verifyUrl . "\n\nThis link expires in 5 minutes.";
+        $message = "Please verify your account by clicking the link below:\n\n" . $verifyUrl . "\n\nThis link expires in 15 minutes.";
         $headers = "From: no-reply@" . $_SERVER["HTTP_HOST"] . "\r\n";
 
         @mail($email, $subject, $message, $headers);
