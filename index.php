@@ -9,6 +9,35 @@
 </head>
 <body>
 
+<?php
+    session_start();
+    include "includes/register.inc.php";
+    include "includes/login.inc.php";
+
+    if (isset($_GET["error"])) {
+        if ($_GET["error"] == "emptyinput") {
+            echo "<script>showPopup1('Please fill in all fields!');</script>";
+        }
+        else if ($_GET["error"] == "invalidemail") {
+            echo "<script>showPopup1('Please enter a valid email address!');</script>";
+        }
+        else if ($_GET["error"] == "passwordmatch") {
+            echo "<script>showPopup1('Passwords do not match!');</script>";
+        }
+        else if ($_GET["error"] == "useroremailtaken") {
+            echo "<script>showPopup1('Username or email already taken!');</script>";
+        }
+        else if ($_GET["error"] == "invaliduid") {
+            echo "<script>showPopup1('Username must be between 2 and 6 characters long!');</script>";
+        }
+        else if ($_GET["error"] == "stmtfailed") {
+            echo "<script>showPopup1('Something went wrong, please try again!');</script>";
+        }
+        else if ($_GET["error"] == "none") {
+            echo "<script>showPopup1('You have been successfully registered!');</script>";
+        }
+    }
+?>
 <!--LOGIN AND REGISTER-->
 <div class="container" id="container">
     <div class="form-container register">
