@@ -42,6 +42,18 @@ function forgotPassword(){
     openAd();
 };
 
+function togglePasswordVisibility(checkboxId, inputId) {
+    const checkbox = $(checkboxId);
+    const input = $(inputId);
+    if (!checkbox || !input) return;
+    checkbox.addEventListener('change', () => {
+        input.type = checkbox.checked ? 'text' : 'password';
+    });
+}
+
+togglePasswordVisibility('showRegisterPwd', 'registerPwd');
+togglePasswordVisibility('showLoginPwd', 'loginPwd');
+
 window.addEventListener("message", (e) => {
     if (e.data?.type === "close-ad") {
         backdrop.classList.remove("is-visible");

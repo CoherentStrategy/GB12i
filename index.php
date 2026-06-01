@@ -56,7 +56,8 @@ session_start();
         <form action="includes/register.inc.php" method="post">
             <h2>Create Account</h2>
             <input type="text" name="uid" placeholder="Username">
-            <input type="password" name="pwd" placeholder="Password">
+            <input type="password" id="registerPwd" name="pwd" placeholder="Password">
+            <label class="show-password-label"><input type="checkbox" id="showRegisterPwd"> Show password</label>
             <input type="password" name="pwdrepeat" placeholder="Repeat Password">
             <input type="text" name="email" placeholder="Email">
             <button type="submit" name="submit">Register</button>
@@ -67,7 +68,8 @@ session_start();
         <form action="includes/login.inc.php" method="post">
             <h2>Login</h2>
             <input type="text" name="uid" placeholder="Username">
-            <input type="password" name="pwd" placeholder="Password">
+            <input type="password" id="loginPwd" name="pwd" placeholder="Password">
+            <label class="show-password-label"><input type="checkbox" id="showLoginPwd"> Show password</label>
             <a href="#" id="forgotPassword">Forgot Password?</a>
             <button type="submit" name="submit">Confirm Login</button>
         </form>
