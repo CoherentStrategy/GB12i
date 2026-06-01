@@ -80,6 +80,23 @@ body{
     outline: none;
 }
 
+.show-password-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #666;
+    margin: 6px 0 12px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.show-password-label input {
+    width: 14px;
+    height: 14px;
+    margin: 0;
+}
+
 .form-container{
     position: absolute;
     top: 0;
@@ -201,16 +218,58 @@ body{
     display: none;
 }
 
-#popupOverlay1, #popupOverlay2{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
+#popupOverlay1, #popupOverlay2 {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
 }
 
-#popupBox1, #popupBox2{background:#fff;padding:20px;border-radius:10px;max-width:650px;width:100%}
+#popupOverlay1.is-visible, #popupOverlay2.is-visible {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+#popupBox1, #popupBox2 {
+    background: #fff;
+    padding: 28px;
+    border-radius: 28px;
+    max-width: 650px;
+    width: 100%;
+    box-shadow: 0 28px 90px rgba(15, 45, 80, 0.16);
+    transform: translateY(16px) scale(0.96);
+    opacity: 0;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+#popupOverlay1.is-visible #popupBox1,
+#popupOverlay2.is-visible #popupBox2 {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    animation: popupFade 0.34s ease-out both;
+}
+
+@keyframes popupFade {
+    from {
+        transform: translateY(22px) scale(0.96);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+#popupOverlay1 button, #popupOverlay2 button {
+    border-radius: 999px;
+    padding: 12px 26px;
+    box-shadow: none;
+}
 
 .is-visible {
     display: flex; /* Becomes a flex container when this class is present */
@@ -232,6 +291,9 @@ body{
 
 #ad-popup {
     animation: popupIn 0.4s ease;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18);
 }
 
 @keyframes popupIn {
@@ -262,12 +324,13 @@ button:hover{background-color:#82c7ff}
         /* Central Warning Box */
         .warning-box {
             background: #2a2a2a;
-            padding: 30px 40px;
-            border-radius: 6px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            padding: 32px 40px;
+            border-radius: 24px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.32);
             text-align: center;
             border: 2px solid #ff4444; 
             max-width: 400px;
+            animation: popupFade 0.35s ease-out both;
         }
         .warning-box h1 { color: #ff4444; margin: 0 0 10px 0; font-size: 24px; }
         .warning-box p { color: #bbb; margin: 0 0 20px 0; font-size: 14px; line-height: 1.4; }
@@ -280,8 +343,141 @@ button:hover{background-color:#82c7ff}
             padding: 12px 24px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 4px;
+            border-radius: 999px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s ease, transform 0.2s ease;
         }
-        .takeover-btn:hover { background: #e03333; }
+        .takeover-btn:hover { background: #e03333; transform: translateY(-1px); }
+
+/* Responsive mobile-friendly layout */
+@media (max-width: 850px) {
+    body {
+        align-items: center;
+        justify-content: flex-start;
+        padding: 24px 0;
+        height: auto;
+    }
+
+    .container {
+        width: min(100%, 720px);
+        min-height: 560px;
+        margin: 0 12px;
+        border-radius: 26px;
+    }
+
+    .container form {
+        padding: 18px;
+    }
+
+    .container button,
+    .container .hide {
+        width: 100%;
+        padding: 12px 0;
+    }
+
+    .container input {
+        font-size: 14px;
+        padding: 12px 14px;
+    }
+
+    .toggle-panel {
+        padding: 0 22px;
+    }
+
+    .toggle-panel h1 {
+        font-size: 24px;
+    }
+
+    .toggle-panel p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 18px 0;
+    }
+
+    .container {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        border-radius: 24px;
+    }
+
+    .container p,
+    .toggle-panel p,
+    .warning-box p {
+        font-size: 14px;
+    }
+
+    .container form {
+        padding: 16px;
+    }
+
+    .form-container {
+        width: 100%;
+        height: auto;
+        position: relative;
+        left: 0;
+    }
+
+    .register,
+    .login {
+        width: 100%;
+        position: relative;
+        transform: none !important;
+    }
+
+    .toggle-container {
+        width: 100%;
+        left: 0;
+        border-radius: 0 0 24px 24px;
+        top: auto;
+        bottom: 0;
+        position: relative;
+        height: auto;
+    }
+
+    .toggle {
+        width: 100%;
+        left: 0;
+        transform: none !important;
+        position: relative;
+        min-height: auto;
+    }
+
+    .toggle-panel {
+        width: 100%;
+        position: relative;
+        transform: none !important;
+        padding: 24px 18px;
+    }
+
+    .toggle-left,
+    .toggle-right {
+        transform: none !important;
+    }
+
+    .toggle-panel button.hide {
+        width: auto;
+    }
+
+    #popupBox1,
+    #popupBox2,
+    .warning-box {
+        margin: 0 16px;
+        max-width: calc(100% - 32px);
+    }
+
+    #ad-backdrop .ad-popup {
+        width: min(100%, 480px);
+        max-width: 100%;
+    }
+
+    #ad-backdrop iframe {
+        width: 100%;
+        height: 70vh;
+    }
+}

@@ -14,6 +14,7 @@ if (isset($_POST["submit"])) {
     // Running error handlers and user login
     $login->loginUser();
 
-    // Going back to front page
-    header("location: ../index.php?error=none");
+    // Redirect to dashboard after successful login
+    header("location: /dashboard.php");
+    exit();
 }

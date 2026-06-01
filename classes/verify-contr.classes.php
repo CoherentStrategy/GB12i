@@ -32,7 +32,7 @@ class VerifyContr extends Verify {
             exit();
         }
 
-        header("location: ../index.php?error=verified");
+        header("location: /dashboard.php");
         exit();
     }
 
