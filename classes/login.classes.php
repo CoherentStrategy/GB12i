@@ -2,7 +2,9 @@
 
 class Login extends Dbh {
     protected function getUser($uid, $pwd) {
-        $stmt = $this->connect()->prepare('SELECT users_pwd FROM users WHERE users_uid = ? OR users_email = ?;');
+        $this->deleteExpiredUnverifiedUsers();
+
+        $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_uid = ? OR users_email = ?;');
 
         if (!$stmt->execute(array($uid, $uid))) {
             $stmt = null;
@@ -16,36 +18,32 @@ class Login extends Dbh {
             exit();
         }
 
-        $pwdHashed = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $checkPwd = password_verify($pwd, $pwdHashed[0]["users_pwd"]);
+        $user = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+        $checkPwd = password_verify($pwd, $user["users_pwd"]);
 
         if ($checkPwd == false) {
             $stmt = null;
             header("location: ../index.php?error=wrongpassword");
             exit();
-        } else if ($checkPwd == true) {
-            $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_uid = ? OR users_email = ? AND users_pwd = ?;');
-
-            if (!$stmt->execute(array($uid, $uid, $pwd))) {
-                $stmt = null;
-                header("location: ../index.php?error=stmtfailed");
-                exit();
-            }
-
-            if ($stmt->rowCount() == 0) {
-                $stmt = null;
-                header("location: ../index.php?error=usernotfound");
-                exit();
-            }
-
-            $user = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            session_start();
-            $_SESSION["userid"] = $user[0]["users_id"];
-            $_SESSION["useruid"] = $user[0]["users_uid"];
-
-            $stmt = null;
         }
+
+        if ($user["email_verified"] == 0) {
+            if (!empty($user["verification_expires"]) && strtotime($user["verification_expires"]) < time()) {
+                $delete = $this->connect()->prepare('DELETE FROM users WHERE users_id = ?;');
+                $delete->execute(array($user["users_id"]));
+                $delete = null;
+                header("location: ../index.php?error=expiredanddeleted");
+                exit();
+            }
+            $stmt = null;
+            header("location: ../index.php?error=notverified");
+            exit();
+        }
+
+        session_start();
+        $_SESSION["userid"] = $user["users_id"];
+        $_SESSION["useruid"] = $user["users_uid"];
+
         $stmt = null;
     }
 }

@@ -37,7 +37,16 @@ session_start();
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Something went wrong, please try again!'); });</script>";
         }
         else if ($_GET["error"] == "none") {
-            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('You have been successfully registered!'); });</script>";
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('You have been successfully registered! Please verify your email.'); });</script>";
+        }
+        else if ($_GET["error"] == "notverified") {
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your email is not verified yet. Please check your inbox and verify your account.'); });</script>";
+        }
+        else if ($_GET["error"] == "expiredanddeleted") {
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your account was not verified within 5 minutes and has been deleted. Please register again.'); });</script>";
+        }
+        else if ($_GET["error"] == "verified") {
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your email has been verified. You can now log in.'); });</script>";
         }
     }
 ?>
@@ -57,8 +66,8 @@ session_start();
     <div class="form-container login">
         <form action="includes/login.inc.php" method="post">
             <h2>Login</h2>
-            <input type="text" placeholder="Username">
-            <input type="password" placeholder="Password">
+            <input type="text" name="uid" placeholder="Username">
+            <input type="password" name="pwd" placeholder="Password">
             <a href="#" id="forgotPassword">Forgot Password?</a>
             <button type="submit" name="submit">Confirm Login</button>
         </form>

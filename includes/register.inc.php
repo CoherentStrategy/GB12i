@@ -17,7 +17,8 @@ if (isset($_POST["submit"]))
     // Running error handlers and user registration
     $register->registerUser();
 
-    // Going back to front page
-    header("location: ../index.php?error=none");
+    // Send the user to verification step
+    header("location: ../verify.php?email=" . urlencode($email));
+    exit();
 
 }

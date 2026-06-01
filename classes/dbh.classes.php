@@ -1,7 +1,7 @@
 <?php
 
 class Dbh {
-    private function connect() {
+    protected function connect() {
         try {
             $username = "root";
             $password = "";
@@ -11,5 +11,10 @@ class Dbh {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
         }
+    }
+
+    protected function deleteExpiredUnverifiedUsers() {
+        $stmt = $this->connect()->prepare("DELETE FROM users WHERE email_verified = 0 AND verification_expires < NOW()");
+        $stmt->execute();
     }
 }
