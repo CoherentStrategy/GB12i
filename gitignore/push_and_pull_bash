@@ -1,5 +1,6 @@
     //locate repo
 cd /workspaces/GB12i
+    or ls -la, pwd
 
     //reconcile divergent branches
     /rebase
