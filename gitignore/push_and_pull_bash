@@ -1,0 +1,23 @@
+    //locate repo
+cd /workspaces/GB12i
+
+    //reconcile divergent branches
+    /rebase
+git config pull.rebase true
+    /merge (edit to false)
+    /rebase globally
+git config --global pull.rebase true
+
+        if need commit or stash
+    //stash (keeps data from being lost)
+git stash
+
+    //pull on origin
+git pull origin main
+
+    //push on origin
+git push origin main
+
+        if stashed
+    //unstash
+git stash pop
