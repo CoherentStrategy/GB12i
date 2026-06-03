@@ -61,6 +61,9 @@ session_start();
             <input type="password" name="pwdrepeat" placeholder="Repeat Password">
             <input type="text" name="email" placeholder="Email">
             <button type="submit" name="submit">Register</button>
+            <div style="margin-top:10px;">
+                <a href="/google-login.php" class="google-btn">Sign in with Google</a>
+            </div>
             <p id="session-id-display">Your device doesn't support JavaScript</p>
         </form>
     </div>
