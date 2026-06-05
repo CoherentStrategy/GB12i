@@ -55,7 +55,7 @@ session_start();
     <div class="form-container register">
         <form action="includes/register.inc.php" method="post">
             <h2>Create Account</h2>
-            <input type="text" name="uid" placeholder="Username">
+            <input type="text" name="uid" placeholder="Username (between 2-6 characters)">
             <input type="password" id="registerPwd" name="pwd" placeholder="Password">
             <label class="show-password-label"><input type="checkbox" id="showRegisterPwd"> Show password</label>
             <input type="password" name="pwdrepeat" placeholder="Repeat Password">
@@ -81,7 +81,7 @@ session_start();
         <div class="toggle">
             <div class="toggle-panel toggle-right">
                 <h1>Welcome to Gamebook 12i!</h1>
-                <p>Fill in your username and password (keep it secure) and click <b>Register</b></p>
+                <p>Fill in your username <b>(between 2-6 characters)</b> and a secure password and click <b>Register</b></p>
                 <br>
                 <p>Already have a account?</p>
                 <button class="hide" id="loginBtn">Login</button>

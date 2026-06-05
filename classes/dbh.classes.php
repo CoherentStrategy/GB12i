@@ -3,9 +3,20 @@
 class Dbh {
     protected function connect() {
         try {
-            $username = "root";
-            $password = "";
-            $dbh = new PDO('mysql:host=localhost;dbname=if0_42065649_ooplogin', $username, $password);
+            $configPath = __DIR__ . '/../config/db.php';
+            $config = file_exists($configPath) ? require $configPath : [];
+
+            $host = $config['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
+            $dbname = $config['DB_NAME'] ?? getenv('DB_NAME') ?: 'if0_42065649_ooplogin';
+            $username = $config['DB_USERNAME'] ?? getenv('DB_USERNAME') ?: 'root';
+            $password = $config['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: '';
+
+            $dbh = new PDO(
+                'mysql:host=' . $host . ';dbname=' . $dbname . ';charset=utf8mb4',
+                $username,
+                $password,
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            );
             return $dbh;
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
