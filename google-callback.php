@@ -4,7 +4,10 @@ session_start();
 require_once __DIR__ . '/classes/dbh.classes.php';
 
 $client = new Google_Client();
-$configPath = __DIR__ . '/client_secret.json';
+$configPath = __DIR__ . '/config/client_secret.json';
+if (!file_exists($configPath)) {
+    $configPath = __DIR__ . '/client_secret.json';
+}
 if (file_exists($configPath)) {
     $client->setAuthConfig($configPath);
 }

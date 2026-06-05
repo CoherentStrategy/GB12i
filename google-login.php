@@ -4,7 +4,10 @@ session_start();
 
 $client = new Google_Client();
 // Load client config if available
-$configPath = __DIR__ . '/client_secret.json';
+$configPath = __DIR__ . '/config/client_secret.json';
+if (!file_exists($configPath)) {
+    $configPath = __DIR__ . '/client_secret.json';
+}
 if (file_exists($configPath)) {
     $client->setAuthConfig($configPath);
 }
