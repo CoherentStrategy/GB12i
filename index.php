@@ -1,5 +1,14 @@
 <?php
 session_start();
+
+// Use your own counter, ignore $_GET['i']
+if (!isset($_SESSION['counter'])) {
+    $_SESSION['counter'] = 1;
+} else {
+    $_SESSION['counter']++;
+}
+
+echo "Counter: " . $_SESSION['counter'];
 ?>
 
 <!DOCTYPE html>
