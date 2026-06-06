@@ -141,5 +141,6 @@ session_start();
 </div>
 
 <script src="GB12i.js"></script>
+<?php include "includes/consent.inc.php"; ?>
 </body>
 </html>
