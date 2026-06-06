@@ -1,3 +1,16 @@
+function updateCount(post = false) {
+        fetch('counter.php', { method: post ? 'POST' : 'GET' })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('count').textContent = data.count;
+            });
+    }
+
+    document.getElementById('next').addEventListener('click', () => updateCount(true));
+
+    // Load initial count
+    updateCount();
+
 /* ---------- HELPERS ---------- */
 const $ = id => document.getElementById(id);
 /* ---------- POPUPS ---------- */

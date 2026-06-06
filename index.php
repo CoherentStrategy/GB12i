@@ -1,14 +1,19 @@
 <?php
 session_start();
 
-// Use your own counter, ignore $_GET['i']
-if (!isset($_SESSION['counter'])) {
-    $_SESSION['counter'] = 1;
-} else {
-    $_SESSION['counter']++;
+header('Content-Type: application/json');
+
+// Initialize counter
+if (!isset($_SESSION['count'])) {
+    $_SESSION['count'] = 0;
 }
 
-echo "Counter: " . $_SESSION['counter'];
+// Increment only on POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $_SESSION['count']++;
+}
+
+echo json_encode(['count' => $_SESSION['count']]);
 ?>
 
 <!DOCTYPE html>
@@ -74,6 +79,8 @@ echo "Counter: " . $_SESSION['counter'];
                 <a href="/google-login.php" class="google-btn">Sign in with Google</a>
             </div>
             <p id="session-id-display">Your device doesn't support JavaScript</p>
+            <h1>Counter: <span id="count">0</span></h1>
+            <button id="next">Next</button>
         </form>
     </div>
     <div class="form-container login">
