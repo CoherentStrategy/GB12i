@@ -11,7 +11,13 @@ if (!file_exists($configPath)) {
 if (file_exists($configPath)) {
     $client->setAuthConfig($configPath);
 }
-$client->setRedirectUri((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/google-callback.php');
+$scheme = 'http';
+if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+    || (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https')
+    || (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on')) {
+    $scheme = 'https';
+}
+$client->setRedirectUri($scheme . '://' . $_SERVER['HTTP_HOST'] . '/google-callback.php');
 
 if (!isset($_GET['code'])) {
     header('Location: /index.php');
