@@ -37,7 +37,10 @@ session_start();
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Something went wrong, please try again!'); });</script>";
         }
         else if ($_GET["error"] == "google_auth_failed") {
-            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Google authentication failed. Please try again or check your OAuth settings.'); });</script>";
+            $reason = isset($_GET['reason']) ? ' Reason: ' . htmlspecialchars($_GET['reason'], ENT_QUOTES, 'UTF-8') : '';
+            $message = 'Google authentication failed. Please try again or check your OAuth settings.' . $reason;
+            $jsMessage = addcslashes($message, "'\\");
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('" . $jsMessage . "'); });</script>";
         }
         else if ($_GET["error"] == "none") {
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('You have been successfully registered! Please verify your email.'); });</script>";
