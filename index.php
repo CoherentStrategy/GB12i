@@ -48,6 +48,9 @@ session_start();
         else if ($_GET["error"] == "verified") {
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Your email has been verified. You can now log in.'); });</script>";
         }
+        else if ($_GET["error"] == "usernotfound") {
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Incorrect username or password!'); });</script>";
+        }
     }
 ?>
 <!--LOGIN AND REGISTER-->

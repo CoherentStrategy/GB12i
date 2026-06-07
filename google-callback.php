@@ -35,34 +35,45 @@ $name = $googleUser->name ?? null;
 $dbh = new Dbh();
 $pdo = $dbh->connect();
 
+function columnExists(PDO $pdo, string $table, string $column): bool {
+    try {
+        $stmt = $pdo->prepare("SHOW COLUMNS FROM `$table` LIKE ?");
+        $stmt->execute([$column]);
+        return $stmt->rowCount() > 0;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+$emailColumn = null;
+if (columnExists($pdo, 'users', 'email')) {
+    $emailColumn = 'email';
+} elseif (columnExists($pdo, 'users', 'users_email')) {
+    $emailColumn = 'users_email';
+}
+
+$haveEmailVerified = columnExists($pdo, 'users', 'email_verified');
+$haveOauthColumns = columnExists($pdo, 'users', 'oauth_provider') && columnExists($pdo, 'users', 'oauth_uid');
+
 $user = null;
 
 // 1) Try finding user by oauth columns (if present)
-try {
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE oauth_provider = 'google' AND oauth_uid = ? LIMIT 1");
-    $stmt->execute([$googleId]);
-    if ($stmt->rowCount() > 0) {
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-} catch (Exception $e) {
-    // oauth columns may not exist; ignore and continue
-}
-
-// 2) Fallback: find by email (try different email column names)
-if (!$user && $email) {
+if ($haveOauthColumns && $googleId) {
     try {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
-        $stmt->execute([$email]);
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE oauth_provider = 'google' AND oauth_uid = ? LIMIT 1");
+        $stmt->execute([$googleId]);
         if ($stmt->rowCount() > 0) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
         }
     } catch (Exception $e) {
-        // ignore
+        // oauth columns may not exist; ignore and continue
     }
 }
-if (!$user && $email) {
+
+// 2) Fallback: find by email
+if (!$user && $email && $emailColumn) {
     try {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE users_email = ? LIMIT 1");
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE `$emailColumn` = ? LIMIT 1");
         $stmt->execute([$email]);
         if ($stmt->rowCount() > 0) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -72,56 +83,56 @@ if (!$user && $email) {
     }
 }
 
-// 3) If user not found create a new user with minimal fields
+// 3) If user not found continue to the OAuth completion flow
 if (!$user) {
-    $username = $email ? explode('@', $email)[0] : 'googleuser_' . substr($googleId, 0, 8);
-    $randomPwd = bin2hex(random_bytes(8));
-    $hashed = password_hash($randomPwd, PASSWORD_DEFAULT);
+    if (!$email || !$googleId) {
+        header('Location: /index.php?error=oauthinvalid');
+        exit;
+    }
 
-    // Try inserting using common column names (users_uid, users_pwd, email)
-    try {
-        $stmt = $pdo->prepare("INSERT INTO users (users_uid, users_pwd, email, email_verified) VALUES (?, ?, ?, 1)");
-        $stmt->execute([$username, $hashed, $email]);
-        $lastId = $pdo->lastInsertId();
-    } catch (Exception $e) {
-        // try alternative column name users_email
-        try {
-            $stmt = $pdo->prepare("INSERT INTO users (users_uid, users_pwd, users_email, email_verified) VALUES (?, ?, ?, 1)");
-            $stmt->execute([$username, $hashed, $email]);
-            $lastId = $pdo->lastInsertId();
-        } catch (Exception $e2) {
-            header('Location: /index.php?error=stmtfailed');
-            exit;
-        }
-    }
-    // Fetch the new user row if possible
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE users_id = ? LIMIT 1");
-        $stmt->execute([$lastId]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (Exception $e) {
-        // best effort
-    }
+    $_SESSION['oauth_pending'] = [
+        'email' => $email,
+        'googleId' => $googleId,
+        'name' => $name,
+    ];
+    header('Location: /oauth-complete.php');
+    exit;
 }
 
 // 4) Update oauth columns if available
-try {
-    $stmt = $pdo->prepare("UPDATE users SET oauth_provider = 'google', oauth_uid = ? WHERE email = ? OR users_email = ?");
-    $stmt->execute([$googleId, $email, $email]);
-} catch (Exception $e) {
-    // ignore if columns don't exist
+if ($haveOauthColumns && $googleId && $email) {
+    $updateConditions = [];
+    $updateParams = [$googleId];
+
+    if (columnExists($pdo, 'users', 'email')) {
+        $updateConditions[] = 'email = ?';
+        $updateParams[] = $email;
+    }
+    if (columnExists($pdo, 'users', 'users_email')) {
+        $updateConditions[] = 'users_email = ?';
+        $updateParams[] = $email;
+    }
+
+    if (!empty($updateConditions)) {
+        try {
+            $stmt = $pdo->prepare('UPDATE users SET oauth_provider = \'google\', oauth_uid = ? WHERE ' . implode(' OR ', $updateConditions));
+            $stmt->execute($updateParams);
+        } catch (Exception $e) {
+            // ignore if columns don't exist
+        }
+    }
 }
 
 // 5) Log the user in (set session similar to existing login)
 session_regenerate_id(true);
-if ($user && (isset($user['users_id']) || isset($lastId))) {
+if (($user && isset($user['users_id'])) || isset($lastId)) {
     $uid = $user['users_id'] ?? $lastId;
     $_SESSION['userid'] = $uid;
-    $_SESSION['useruid'] = $user['users_uid'] ?? ($email ? explode('@', $email)[0] : null);
+    $_SESSION['useruid'] = $user['users_uid'] ?? $username;
     header('Location: /dashboard.php');
     exit;
 }
 
 // Fallback redirect
-header('Location: /index.php');
+header('Location: /index.php?error=stmtfailed');
 exit;
