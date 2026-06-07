@@ -24,6 +24,26 @@ class Dbh {
         }
     }
 
+    protected function columnExists(string $column): bool {
+        try {
+            $stmt = $this->connect()->prepare("SHOW COLUMNS FROM `users` LIKE ?");
+            $stmt->execute([$column]);
+            return $stmt->rowCount() > 0;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    protected function getEmailColumn(): ?string {
+        if ($this->columnExists('email')) {
+            return 'email';
+        }
+        if ($this->columnExists('users_email')) {
+            return 'users_email';
+        }
+        return null;
+    }
+
     protected function deleteExpiredUnverifiedUsers() {
         $stmt = $this->connect()->prepare("DELETE FROM users WHERE email_verified = 0 AND verification_expires < NOW()");
         $stmt->execute();

@@ -4,7 +4,8 @@ class Login extends Dbh {
     protected function getUser($uid, $pwd) {
         $this->deleteExpiredUnverifiedUsers();
 
-        $stmt = $this->connect()->prepare('SELECT * FROM users WHERE users_uid = ? OR users_email = ?;');
+        $emailColumn = $this->getEmailColumn() ?? 'users_email';
+        $stmt = $this->connect()->prepare("SELECT * FROM users WHERE users_uid = ? OR `$emailColumn` = ?;");
 
         if (!$stmt->execute(array($uid, $uid))) {
             $stmt = null;

@@ -20,7 +20,8 @@ if (!isset($_GET['code'])) {
 
 $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
 if (isset($token['error'])) {
-    header('Location: /index.php?error=google_auth_failed');
+    $reason = $token['error_description'] ?? $token['error'];
+    header('Location: /index.php?error=google_auth_failed&reason=' . urlencode($reason));
     exit;
 }
 

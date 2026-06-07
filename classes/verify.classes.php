@@ -2,7 +2,8 @@
 
 class Verify extends Dbh {
     protected function verifyToken($email, $token) {
-        $stmt = $this->connect()->prepare('SELECT * FROM users WHERE email = ?;');
+        $emailColumn = $this->getEmailColumn() ?? 'email';
+        $stmt = $this->connect()->prepare("SELECT * FROM users WHERE `$emailColumn` = ?;");
 
         if (!$stmt->execute(array($email))) {
             $stmt = null;

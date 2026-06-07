@@ -3,11 +3,25 @@
 class Register extends Dbh{
 
     protected function setUser($uid, $pwd, $email, $token, $expires) {
-        $stmt = $this->connect()->prepare("INSERT INTO users (users_uid, users_pwd, email, email_verified, verification_code, verification_expires) VALUES (?, ?, ?, 0, ?, ?)");
+        $emailColumn = $this->getEmailColumn();
+        if ($emailColumn === null) {
+            header("location: ../index.php?error=stmtfailed");
+            exit();
+        }
 
-        $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
+        $columns = ["users_uid", "users_pwd", "`$emailColumn`", "verification_code", "verification_expires"];
+        $placeholders = ["?", "?", "?", "?", "?"];
+        $values = [$uid, password_hash($pwd, PASSWORD_DEFAULT), $email, $token, $expires];
 
-        if (!$stmt->execute(array($uid, $hashedPwd, $email, $token, $expires))) {
+        if ($this->columnExists('email_verified')) {
+            array_splice($columns, 3, 0, 'email_verified');
+            array_splice($placeholders, 3, 0, '?');
+            array_splice($values, 3, 0, 0);
+        }
+
+        $stmt = $this->connect()->prepare('INSERT INTO users (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')');
+
+        if (!$stmt->execute($values)) {
             $stmt = null;
             header("location: ../index.php?error=stmtfailed");
             exit();
@@ -19,7 +33,8 @@ class Register extends Dbh{
     protected function checkUser($uid, $email) {
         $this->deleteExpiredUnverifiedUsers();
 
-        $stmt = $this->connect()->prepare("SELECT users_uid FROM users WHERE users_uid = ? OR email = ?;");
+        $emailColumn = $this->getEmailColumn() ?? 'email';
+        $stmt = $this->connect()->prepare("SELECT users_uid FROM users WHERE users_uid = ? OR `$emailColumn` = ?;");
 
         if (!$stmt->execute(array($uid, $email))) {
             $stmt = null;
