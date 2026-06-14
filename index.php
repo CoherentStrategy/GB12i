@@ -154,7 +154,7 @@ session_start();
 <script type="text/plain" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
 <script type="text/plain" charset="UTF-8">
 document.addEventListener('DOMContentLoaded', function () {
-cookieconsent.run({"notice_banner_type":"headline","consent_type":"express","palette":"dark","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"website_name":"GB12i"});
+cookieconsent.run({"notice_banner_type":"bar","consent_type":"express","palette":"dark","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"page_refresh_confirmation_buttons":false,"notice_banner_position":"bottom","website_name":"GB12i"});
 });
 </script>
 
