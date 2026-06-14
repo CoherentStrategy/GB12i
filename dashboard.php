@@ -20,24 +20,32 @@ $userUid = isset($_SESSION["useruid"]) ? htmlspecialchars($_SESSION["useruid"], 
 </head>
 <body>
     <?php $profilePic = isset($_SESSION['profile_pic']) ? htmlspecialchars($_SESSION['profile_pic'], ENT_QUOTES, 'UTF-8') : ''; ?>
-    <div class="container" style="max-width: 600px; margin: 48px auto; padding: 32px;">
-        <h1>Dashboard</h1>
-        <p>Welcome back, <strong><?php echo $userUid; ?></strong>!</p>
-        <?php if ($profilePic): ?>
-            <div style="margin: 24px 0 0; display: flex; align-items: center; gap: 16px;">
-                <img src="<?php echo $profilePic; ?>" alt="Profile picture" style="width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.9); box-shadow: 0 10px 30px rgba(0,0,0,0.14);">
+    <div class="container">
+        <div class="dashboard-card">
+            <div class="dashboard-header">
                 <div>
-                    <p style="margin:0;font-size:0.95rem;color:#555;"><strong>Logged in as</strong></p>
-                    <p style="margin:6px 0 0;font-weight:700;"><?php echo $userUid; ?></p>
+                    <h1>Dashboard</h1>
+                    <p>Welcome back, <strong><?php echo $userUid; ?></strong>!</p>
                 </div>
+                <a href="includes/logout.inc.php" class="btn btn-primary">Logout</a>
             </div>
-        <?php endif; ?>
-        <div style="margin-top: 24px; padding: 20px; background: #f7f9ff; border-radius: 16px; border: 1px solid rgba(1, 107, 227, 0.12);">
-            <p><strong>User ID:</strong> <?php echo $userId; ?></p>
-            <p><strong>Username:</strong> <?php echo $userUid; ?></p>
+
+            <?php if ($profilePic): ?>
+                <div class="profile-card">
+                    <img src="<?php echo $profilePic; ?>" alt="Profile picture">
+                    <div>
+                        <p><strong>Logged in as</strong></p>
+                        <p class="profile-username"><?php echo $userUid; ?></p>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <div class="dashboard-info">
+                <div class="dashboard-row"><span>User ID:</span><strong><?php echo $userId; ?></strong></div>
+                <div class="dashboard-row"><span>Username:</span><strong><?php echo $userUid; ?></strong></div>
+            </div>
+            <p class="dashboard-note">You have successfully logged in or completed registration. Use the logout button above when you are finished.</p>
         </div>
-        <p style="margin-top: 24px;">You have successfully logged in or completed registration. Use the button below to log out when you are finished.</p>
-        <a href="includes/logout.inc.php" style="display: inline-block; margin-top: 24px; padding: 12px 24px; background: #016be3; color: #fff; border-radius: 999px; text-decoration: none;">Logout</a>
     </div>
 </body>
 </html>

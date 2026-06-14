@@ -210,6 +210,84 @@ body{
 .btn { padding:8px 14px; border-radius:8px; border:1px solid #ddd; background:#f6f6f6; cursor:pointer; }
 .btn-primary { background:#016be3; color:#fff; border-color:transparent; }
 
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 28px;
+    padding: 36px;
+    max-width: 720px;
+    margin: 48px auto;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14);
+}
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 30px;
+}
+.dashboard-header h1 {
+    margin: 0 0 8px;
+    font-size: 2.1rem;
+    letter-spacing: -0.04em;
+}
+.dashboard-header p {
+    margin: 0;
+    color: #4a5568;
+    font-size: 0.98rem;
+}
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 24px;
+    padding: 20px 22px;
+    margin-bottom: 26px;
+    border: 1px solid rgba(1, 107, 227, 0.08);
+}
+.profile-card img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+.profile-card p {
+    margin: 0;
+    color: #2d3748;
+}
+.profile-username {
+    margin-top: 6px;
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+.dashboard-info {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+.dashboard-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: rgba(242, 247, 255, 0.88);
+    border-radius: 18px;
+    border: 1px solid rgba(1, 107, 227, 0.08);
+}
+.dashboard-row span {
+    color: #4a5568;
+}
+.dashboard-row strong {
+    color: #1e293b;
+}
+.dashboard-note {
+    margin: 0;
+    color: #475569;
+    line-height: 1.8;
+}
 
 .toggle-container{
     position: absolute;
