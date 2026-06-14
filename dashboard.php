@@ -19,6 +19,7 @@ $userUid = isset($_SESSION["useruid"]) ? htmlspecialchars($_SESSION["useruid"], 
     <title>Dashboard</title>
 </head>
 <body>
+    <div class="page-background"></div>
     <a href="includes/logout.inc.php" class="logout-topright btn btn-primary">Logout</a>
     <?php $profilePic = isset($_SESSION['profile_pic']) ? htmlspecialchars($_SESSION['profile_pic'], ENT_QUOTES, 'UTF-8') : ''; ?>
     <div class="container">
