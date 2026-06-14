@@ -162,6 +162,27 @@ session_start();
 </div>
 
 <script src="GB12i.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        const forceLogin = [
+            'notverified',
+            'verified',
+            'usernotfound',
+            'wrongpassword',
+            'google_auth_failed',
+            'oauthconfigmissing',
+            'oauthconfiginvalid'
+        ].includes(error);
+        if (forceLogin) {
+            const container = document.getElementById('container');
+            if (container) {
+                container.classList.add('active');
+            }
+        }
+    });
+</script>
 <!-- Cookie Consent by TermsFeed https://www.TermsFeed.com -->
 <script type="text/plain" src="https://www.termsfeed.com/public/cookie-consent/4.2.0/cookie-consent.js" charset="UTF-8"></script>
 <script type="text/plain" charset="UTF-8">

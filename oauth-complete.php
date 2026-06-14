@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (isset($_SESSION['userid']) && !empty($_SESSION['userid'])) {
+    header('Location: /dashboard.php');
+    exit;
+}
+
 if (!isset($_SESSION['oauth_pending']) || empty($_SESSION['oauth_pending']['email']) || empty($_SESSION['oauth_pending']['googleId'])) {
     header('Location: /index.php');
     exit;
