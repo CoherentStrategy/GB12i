@@ -19,32 +19,49 @@ $userUid = isset($_SESSION["useruid"]) ? htmlspecialchars($_SESSION["useruid"], 
     <title>Dashboard</title>
 </head>
 <body>
+    <a href="includes/logout.inc.php" class="logout-topright btn btn-primary">Logout</a>
     <?php $profilePic = isset($_SESSION['profile_pic']) ? htmlspecialchars($_SESSION['profile_pic'], ENT_QUOTES, 'UTF-8') : ''; ?>
     <div class="container">
         <div class="dashboard-card">
-            <div class="dashboard-header">
-                <div>
-                    <h1>Dashboard</h1>
-                    <p>Welcome back, <strong><?php echo $userUid; ?></strong>!</p>
-                </div>
-                <a href="includes/logout.inc.php" class="btn btn-primary">Logout</a>
-            </div>
-
-            <?php if ($profilePic): ?>
-                <div class="profile-card">
-                    <img src="<?php echo $profilePic; ?>" alt="Profile picture">
-                    <div>
-                        <p><strong>Logged in as</strong></p>
-                        <p class="profile-username"><?php echo $userUid; ?></p>
+            <div class="dashboard-layout">
+                <aside class="dashboard-sidebar">
+                    <div class="sidebar-brand">
+                        <h2>Quick Links</h2>
+                        <p>Navigate your account actions and settings.</p>
                     </div>
-                </div>
-            <?php endif; ?>
+                    <nav class="sidebar-nav">
+                        <a href="#profile" class="sidebar-link">Profile</a>
+                        <a href="#details" class="sidebar-link">Account details</a>
+                        <a href="#activity" class="sidebar-link">Activity</a>
+                        <a href="#help" class="sidebar-link">Help & support</a>
+                    </nav>
+                </aside>
 
-            <div class="dashboard-info">
-                <div class="dashboard-row"><span>User ID:</span><strong><?php echo $userId; ?></strong></div>
-                <div class="dashboard-row"><span>Username:</span><strong><?php echo $userUid; ?></strong></div>
+                <main class="dashboard-main">
+                    <div class="dashboard-header">
+                        <div>
+                            <h1>Dashboard</h1>
+                            <p>Welcome back, <strong><?php echo $userUid; ?></strong>!</p>
+                        </div>
+                    </div>
+
+                    <?php if ($profilePic): ?>
+                        <div class="profile-card" id="profile">
+                            <img src="<?php echo $profilePic; ?>" alt="Profile picture">
+                            <div>
+                                <p><strong>Logged in as</strong></p>
+                                <p class="profile-username"><?php echo $userUid; ?></p>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="dashboard-info" id="details">
+                        <div class="dashboard-row"><span>User ID:</span><strong><?php echo $userId; ?></strong></div>
+                        <div class="dashboard-row"><span>Username:</span><strong><?php echo $userUid; ?></strong></div>
+                    </div>
+                    <p class="dashboard-note">You have successfully logged in or completed registration. Use the logout button above when you are finished.</p>
+                </main>
             </div>
-            <p class="dashboard-note">You have successfully logged in or completed registration. Use the logout button above when you are finished.</p>
         </div>
     </div>
 </body>
