@@ -21,7 +21,7 @@ class OauthRegister extends Dbh {
         return null;
     }
 
-    protected function setOauthUser($uid, $pwd, $email, $provider, $oauthUid) {
+    protected function setOauthUser($uid, $pwd, $email, $provider, $oauthUid, $profilePic = null) {
         $emailColumn = $this->getEmailColumn();
         $columns = ['users_uid', 'users_pwd'];
         $placeholders = ['?', '?'];
@@ -46,6 +46,12 @@ class OauthRegister extends Dbh {
             $columns[] = 'oauth_uid';
             $placeholders[] = '?';
             $values[] = $oauthUid;
+        }
+
+        if ($this->columnExists('profile_pic')) {
+            $columns[] = 'profile_pic';
+            $placeholders[] = '?';
+            $values[] = $profilePic;
         }
 
         $stmt = $this->connect()->prepare('INSERT INTO users (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')');

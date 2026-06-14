@@ -2,7 +2,7 @@
 
 class Register extends Dbh{
 
-    protected function setUser($uid, $pwd, $email, $token, $expires) {
+    protected function setUser($uid, $pwd, $email, $token, $expires, $profilePic = null) {
         $emailColumn = $this->getEmailColumn();
         if ($emailColumn === null) {
             header("location: ../index.php?error=stmtfailed");
@@ -17,6 +17,12 @@ class Register extends Dbh{
             array_splice($columns, 3, 0, 'email_verified');
             array_splice($placeholders, 3, 0, '?');
             array_splice($values, 3, 0, 0);
+        }
+
+        if ($this->columnExists('profile_pic')) {
+            $columns[] = 'profile_pic';
+            $placeholders[] = '?';
+            $values[] = $profilePic;
         }
 
         $stmt = $this->connect()->prepare('INSERT INTO users (' . implode(', ', $columns) . ') VALUES (' . implode(', ', $placeholders) . ')');

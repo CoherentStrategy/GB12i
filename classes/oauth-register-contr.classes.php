@@ -6,14 +6,16 @@ class OauthRegisterContr extends OauthRegister {
     private $pwdRepeat;
     private $email;
     private $googleId;
+    private $profilePic;
     private $newUserId;
 
-    public function __construct($uid, $pwd, $pwdRepeat, $email, $googleId) {
+    public function __construct($uid, $pwd, $pwdRepeat, $email, $googleId, $profilePic = null) {
         $this->uid = trim($uid);
         $this->pwd = $pwd;
         $this->pwdRepeat = $pwdRepeat;
         $this->email = $email;
         $this->googleId = $googleId;
+        $this->profilePic = $profilePic;
     }
 
     public function registerUser() {
@@ -38,7 +40,7 @@ class OauthRegisterContr extends OauthRegister {
             exit();
         }
 
-        $this->newUserId = $this->setOauthUser($this->uid, $this->pwd, $this->email, 'google', $this->googleId);
+        $this->newUserId = $this->setOauthUser($this->uid, $this->pwd, $this->email, 'google', $this->googleId, $this->profilePic);
         return $this->newUserId;
     }
 

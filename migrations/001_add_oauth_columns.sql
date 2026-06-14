@@ -3,7 +3,8 @@
 
 ALTER TABLE users
   ADD COLUMN oauth_provider VARCHAR(50) NULL,
-  ADD COLUMN oauth_uid VARCHAR(255) NULL;
+  ADD COLUMN oauth_uid VARCHAR(255) NULL,
+  ADD COLUMN profile_pic VARCHAR(512) NULL;
 
 -- Optional: index for quick lookup
 CREATE INDEX idx_users_oauth ON users (oauth_provider, oauth_uid);

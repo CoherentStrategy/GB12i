@@ -12,17 +12,19 @@ if (isset($_POST['submit'])) {
     $pwdRepeat = $_POST['pwdrepeat'] ?? '';
     $email = $_SESSION['oauth_pending']['email'];
     $googleId = $_SESSION['oauth_pending']['googleId'];
+    $profilePic = $_SESSION['oauth_pending']['picture'] ?? null;
 
     include "../classes/dbh.classes.php";
     include "../classes/oauth-register.classes.php";
     include "../classes/oauth-register-contr.classes.php";
 
-    $register = new OauthRegisterContr($uid, $pwd, $pwdRepeat, $email, $googleId);
+    $register = new OauthRegisterContr($uid, $pwd, $pwdRepeat, $email, $googleId, $profilePic);
     $userId = $register->registerUser();
 
     if ($userId) {
         $_SESSION['userid'] = $userId;
         $_SESSION['useruid'] = $uid;
+        $_SESSION['profile_pic'] = $profilePic ?? '';
         unset($_SESSION['oauth_pending']);
         header('Location: /dashboard.php');
         exit;

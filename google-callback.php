@@ -58,6 +58,7 @@ try {
 $email = $googleUser->email ?? null;
 $googleId = $googleUser->id ?? null;
 $name = $googleUser->name ?? null;
+$picture = $googleUser->picture ?? null;
 
 $dbh = new Dbh();
 $pdo = $dbh->connect();
@@ -121,6 +122,7 @@ if (!$user) {
         'email' => $email,
         'googleId' => $googleId,
         'name' => $name,
+        'picture' => $picture,
     ];
     header('Location: /oauth-complete.php');
     exit;
@@ -142,8 +144,16 @@ if ($haveOauthColumns && $googleId && $email) {
 
     if (!empty($updateConditions)) {
         try {
-            $stmt = $pdo->prepare('UPDATE users SET oauth_provider = \'google\', oauth_uid = ? WHERE ' . implode(' OR ', $updateConditions));
-            $stmt->execute($updateParams);
+            $updateFields = ['oauth_provider = \'google\'', 'oauth_uid = ?'];
+            $updateParamsTemp = [$googleId];
+
+            if ($picture && columnExists($pdo, 'users', 'profile_pic')) {
+                $updateFields[] = 'profile_pic = ?';
+                $updateParamsTemp[] = $picture;
+            }
+
+            $stmt = $pdo->prepare('UPDATE users SET ' . implode(', ', $updateFields) . ' WHERE ' . implode(' OR ', $updateConditions));
+            $stmt->execute($updateParamsTemp);
         } catch (Exception $e) {
             // ignore if columns don't exist
         }
@@ -156,6 +166,7 @@ if (($user && isset($user['users_id'])) || isset($lastId)) {
     $uid = $user['users_id'] ?? $lastId;
     $_SESSION['userid'] = $uid;
     $_SESSION['useruid'] = $user['users_uid'] ?? $username;
+    $_SESSION['profile_pic'] = $user['profile_pic'] ?? '';
     header('Location: /dashboard.php');
     exit;
 }

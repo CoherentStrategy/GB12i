@@ -5,5 +5,5 @@ session_unset();
 session_destroy();
 
 // Going back to front page
-header("location: ../index.php?error=none");
+header("location: ../index.php");
 exit();
