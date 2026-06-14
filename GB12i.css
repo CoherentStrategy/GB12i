@@ -6,24 +6,35 @@
 }
 
 body{
-    background-color: #c9d6ff;
-    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+    background: url("img/cloud.png") center/cover no-repeat, linear-gradient(to right, #e2e2e2, #c9d6ff);
+    background-blend-mode: overlay;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .container{
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(14px);
     border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.18);
     position: relative;
     overflow: hidden;
     width: 768px;
     max-width: 100%;
     min-height: 480px;
+}
+
+.container form{
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    height: 100%;
 }
 
 .container p{
@@ -41,25 +52,35 @@ body{
 }
 
 .container button{
-    background-color: #016be3;
+    background-color: rgba(255, 255, 255, 0.22);
     color: #fff;
     font-size: 12px;
-    padding: 10px 45px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    padding: 12px 38px;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
     text-transform: uppercase;
-    margin-top: 10px;
+    margin-top: 14px;
     cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
+    backdrop-filter: blur(4px);
+}
+
+.container button:hover,
+.container button:focus {
+    background-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.9);
 }
 
 .container button.hide{
-    background-color: transparent;
-    border-color: #fff;
+    background-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.5);
 }
+
 .container form{
-    background-color: #fff;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -69,14 +90,20 @@ body{
 }
 
 .container input{
-    background-color: #eee;
-    border: none;
+    background-color: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.55);
     margin: 8px 0;
-    padding: 10px 15px;
+    padding: 12px 15px;
     font-size: 13px;
-    border-radius: 8px;
+    border-radius: 12px;
     width: 100%;
     outline: none;
+    color: #222;
+}
+
+.container input:focus {
+    background-color: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 0 0 3px rgba(1, 107, 227, 0.12);
 }
 
 .show-password-label {
