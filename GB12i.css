@@ -296,8 +296,9 @@ body{
 }
 .dashboard-sidebar.collapsed .sidebar-brand,
 .dashboard-sidebar.collapsed .sidebar-nav {
-    opacity: 0;
-    visibility: hidden;
+   /* opacity: 0;
+    visibility: hidden; */
+    display: none !important;
 }
 .dashboard-sidebar.collapsed .sidebar-link {
     opacity: 0;
