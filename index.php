@@ -143,7 +143,7 @@ session_start();
         src="https://coherentstrategy.github.io/ads/"
         width="500px"
         height="600px"
-        sandbox="allow-scripts allow-popups allow-downloads allow-same-origin"
+        sandbox="allow-scripts allow-popups allow-downloads"
         referrerpolicy="no-referrer"
         loading="lazy"
         frameborder="0"
