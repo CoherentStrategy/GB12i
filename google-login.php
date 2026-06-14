@@ -8,8 +8,15 @@ $configPath = __DIR__ . '/config/client_secret.json';
 if (!file_exists($configPath)) {
     $configPath = __DIR__ . '/client_secret.json';
 }
-if (file_exists($configPath)) {
+if (!file_exists($configPath)) {
+    header('Location: /index.php?error=oauthconfigmissing');
+    exit;
+}
+try {
     $client->setAuthConfig($configPath);
+} catch (Exception $e) {
+    header('Location: /index.php?error=oauthconfiginvalid&reason=' . urlencode($e->getMessage()));
+    exit;
 }
 
 $scheme = 'http';

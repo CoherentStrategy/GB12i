@@ -1,5 +1,8 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
 require_once __DIR__ . '/classes/dbh.classes.php';
 
@@ -8,8 +11,15 @@ $configPath = __DIR__ . '/config/client_secret.json';
 if (!file_exists($configPath)) {
     $configPath = __DIR__ . '/client_secret.json';
 }
-if (file_exists($configPath)) {
+if (!file_exists($configPath)) {
+    header('Location: /index.php?error=oauthconfigmissing');
+    exit;
+}
+try {
     $client->setAuthConfig($configPath);
+} catch (Exception $e) {
+    header('Location: /index.php?error=oauthconfiginvalid&reason=' . urlencode($e->getMessage()));
+    exit;
 }
 $scheme = 'http';
 if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
@@ -19,21 +29,31 @@ if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
 }
 $client->setRedirectUri($scheme . '://' . $_SERVER['HTTP_HOST'] . '/google-callback.php');
 
-if (!isset($_GET['code'])) {
+if (!isset($_GET['code']) || empty($_GET['code'])) {
     header('Location: /index.php');
     exit;
 }
 
-$token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-if (isset($token['error'])) {
-    $reason = $token['error_description'] ?? $token['error'];
-    header('Location: /index.php?error=google_auth_failed&reason=' . urlencode($reason));
+try {
+    $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+    if (isset($token['error'])) {
+        $reason = $token['error_description'] ?? $token['error'];
+        header('Location: /index.php?error=google_auth_failed&reason=' . urlencode($reason));
+        exit;
+    }
+
+    if (empty($token['access_token']) && empty($token['id_token'])) {
+        header('Location: /index.php?error=google_auth_failed&reason=' . urlencode('Invalid token response from Google.'));
+        exit;
+    }
+
+    $client->setAccessToken($token);
+    $oauth2 = new Google_Service_Oauth2($client);
+    $googleUser = $oauth2->userinfo->get();
+} catch (Throwable $e) {
+    header('Location: /index.php?error=google_auth_failed&reason=' . urlencode($e->getMessage()));
     exit;
 }
-
-$client->setAccessToken($token);
-$oauth2 = new Google_Service_Oauth2($client);
-$googleUser = $oauth2->userinfo->get();
 
 $email = $googleUser->email ?? null;
 $googleId = $googleUser->id ?? null;

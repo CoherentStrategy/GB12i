@@ -534,17 +534,66 @@ button:hover{background-color:#82c7ff}
         pointer-events: all !important;
         transform: none !important;
         z-index: 2 !important;
+        display: none;
     }
 
-    .container.active .register,
+    .register {
+        display: block;
+    }
+
+    .container.active .register {
+        display: none;
+    }
+
     .container.active .login {
-        transform: none !important;
-        opacity: 1 !important;
-        pointer-events: all !important;
+        display: block;
     }
 
     .toggle-container {
-        display: none;
+        display: block;
+        position: relative;
+        width: 100%;
+        margin-top: 16px;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .toggle {
+        width: 100%;
+        min-height: auto;
+        position: relative;
+        left: 0;
+        transform: none !important;
+        background: #0f6fb4;
+        border-radius: 18px;
+    }
+
+    .toggle-panel {
+        position: relative;
+        width: 100%;
+        transform: none !important;
+        padding: 22px 18px;
+        text-align: center;
+        color: #fff;
+        background: transparent;
+    }
+
+    .toggle-left,
+    .toggle-right {
+        transform: none !important;
+    }
+
+    .toggle-panel + .toggle-panel {
+        margin-top: 16px;
+    }
+
+    .toggle-panel h1 {
+        font-size: 1.15rem;
+    }
+
+    .toggle-panel button.hide {
+        width: auto;
+        margin-top: 12px;
     }
 }
 

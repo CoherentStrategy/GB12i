@@ -42,6 +42,15 @@ session_start();
             $jsMessage = addcslashes($message, "'\\");
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('" . $jsMessage . "'); });</script>";
         }
+        else if ($_GET["error"] == "oauthconfigmissing") {
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('Google OAuth configuration is missing. Please upload client_secret.json to the config folder.'); });</script>";
+        }
+        else if ($_GET["error"] == "oauthconfiginvalid") {
+            $reason = isset($_GET['reason']) ? ' Reason: ' . htmlspecialchars($_GET['reason'], ENT_QUOTES, 'UTF-8') : '';
+            $message = 'Google OAuth configuration is invalid.' . $reason;
+            $jsMessage = addcslashes($message, "'\\");
+            echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('" . $jsMessage . "'); });</script>";
+        }
         else if ($_GET["error"] == "none") {
             echo "<script>window.addEventListener('DOMContentLoaded', function(){ openPopup1('You have been successfully registered! Please verify your email.'); });</script>";
         }
