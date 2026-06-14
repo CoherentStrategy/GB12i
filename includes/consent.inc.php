@@ -21,6 +21,14 @@ if (__gb_getCookie('consent') === null) {
         var el = document.getElementById('consent-banner'); if (el) el.style.display = 'flex';
     });
 }
+// Expose a global function so other handlers (or delegated listeners) can open preferences
+window.__gb_showPrefs = function(){
+    var analyticsChk = document.getElementById('pref-analytics');
+    var panel = document.getElementById('preferences-center');
+    if (analyticsChk) analyticsChk.checked = document.cookie.indexOf('analytics=1') !== -1;
+    if (panel) panel.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+};
 function __gb_postConsent(action){
     fetch('/consent.php', {
         method: 'POST',
@@ -72,38 +80,42 @@ __gb_onReady(function(){
     const manageBtn = document.getElementById('consent-manage');
     const analyticsChk = document.getElementById('pref-analytics');
 
+    console.debug('Consent init: openLink=', !!openLink, 'manageBtn=', !!manageBtn, 'panel=', !!panel, 'saveBtn=', !!saveBtn);
+
     function showPrefs(){
-        // populate current state from cookie
-        if (analyticsChk) analyticsChk.checked = document.cookie.indexOf('analytics=1') !== -1;
-        if (panel) panel.setAttribute('aria-hidden','false');
-        document.body.style.overflow = 'hidden';
+        window.__gb_showPrefs();
     }
     function hidePrefs(){
         if (panel) panel.setAttribute('aria-hidden','true');
         document.body.style.overflow = '';
     }
 
-    if (openLink) openLink.addEventListener('click', function(e){ e.preventDefault(); showPrefs(); });
-    if (manageBtn) manageBtn.addEventListener('click', function(e){ e.preventDefault(); showPrefs(); });
+    if (openLink) openLink.addEventListener('click', function(e){ e.preventDefault(); console.debug('openLink clicked'); showPrefs(); });
+    if (manageBtn) manageBtn.addEventListener('click', function(e){ e.preventDefault(); console.debug('manageBtn clicked'); showPrefs(); });
     if (backdrop) backdrop.addEventListener('click', hidePrefs);
     if (closeBtn) closeBtn.addEventListener('click', hidePrefs);
     if (cancelBtn) cancelBtn.addEventListener('click', hidePrefs);
 
     if (saveBtn) saveBtn.addEventListener('click', function(){
         const analytics = !!(analyticsChk && analyticsChk.checked);
+        console.debug('Saving preferences analytics=', analytics);
         fetch('/consent.php', {
             method: 'POST',
             credentials: 'include',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ action: 'set', preferences: { analytics } })
         }).then(() => {
+            console.debug('Preferences saved');
             hidePrefs();
             // also hide banner if present
             const b = document.getElementById('consent-banner'); if (b) b.style.display = 'none';
-        }).catch(() => hidePrefs());
+        }).catch((err) => { console.error('Preferences save failed', err); hidePrefs(); });
     });
 
     // keyboard escape
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape') hidePrefs(); });
 });
+
+// Delegated listener as a fallback: open preferences when element with id is clicked
+document.addEventListener('click', function(e){ if (e.target && e.target.id === 'consent-manage') { try{ window.__gb_showPrefs(); console.debug('delegated manage clicked'); } catch(err){ console.error(err); } } });
 </script>
