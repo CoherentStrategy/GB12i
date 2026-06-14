@@ -25,9 +25,9 @@ $userUid = isset($_SESSION["useruid"]) ? htmlspecialchars($_SESSION["useruid"], 
         <div class="dashboard-card">
             <div class="dashboard-layout">
                 <aside class="dashboard-sidebar" id="dashboardSidebar" aria-expanded="true">
-                    <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                    <div class="sidebar-toggle" id="sidebarToggle" role="button" tabindex="0" aria-label="Toggle sidebar">
                         <img id="sidebarToggleIcon" src="img/menu_open.png" alt="Close sidebar">
-                    </button>
+                    </div>
                     <div class="sidebar-brand">
                         <h2>Quick Links</h2>
                         <p>Navigate your account actions and settings.</p>
@@ -72,11 +72,20 @@ $userUid = isset($_SESSION["useruid"]) ? htmlspecialchars($_SESSION["useruid"], 
             var sidebar = document.getElementById('dashboardSidebar');
             var toggle = document.getElementById('sidebarToggle');
             var icon = document.getElementById('sidebarToggleIcon');
-            toggle.addEventListener('click', function () {
+
+            function toggleSidebar() {
                 var collapsed = sidebar.classList.toggle('collapsed');
                 sidebar.setAttribute('aria-expanded', String(!collapsed));
                 icon.src = collapsed ? 'img/menu.png' : 'img/menu_open.png';
                 icon.alt = collapsed ? 'Open sidebar' : 'Close sidebar';
+            }
+
+            toggle.addEventListener('click', toggleSidebar);
+            toggle.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggleSidebar();
+                }
             });
         });
     </script>
