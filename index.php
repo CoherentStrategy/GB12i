@@ -84,6 +84,9 @@ session_start();
             <label class="show-password-label"><input type="checkbox" id="showLoginPwd"> Show password</label>
             <a href="#" id="forgotPassword">Forgot Password?</a>
             <button type="submit" name="submit">Confirm Login</button>
+            <div style="margin-top:10px;">
+                <a href="/google-login.php" class="google-btn">Sign in with Google</a>
+            </div>
         </form>
     </div>
     <div class="toggle-container">
