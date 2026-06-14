@@ -576,15 +576,12 @@ button:hover{background-color:#82c7ff}
         text-align: center;
         color: #fff;
         background: transparent;
+        display: none;
     }
 
-    .toggle-left,
-    .toggle-right {
-        transform: none !important;
-    }
-
-    .toggle-panel + .toggle-panel {
-        margin-top: 16px;
+    .container:not(.active) .toggle-right,
+    .container.active .toggle-left {
+        display: block;
     }
 
     .toggle-panel h1 {
